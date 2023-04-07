@@ -1,4 +1,5 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
+import 'package:ashesi_social_network/constants/routes.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,7 +39,9 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(profileRoute);
+                  },
                   child: Text(
                     "Profile",
                     style: navButtonsStyle,

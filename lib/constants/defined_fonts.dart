@@ -13,6 +13,9 @@ TextStyle buttonsStyle = GoogleFonts.ubuntu(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle textFieldStyle =
+    GoogleFonts.ubuntu(fontSize: 15, fontWeight: FontWeight.bold);
+
 TextStyle appBarFont = GoogleFonts.ubuntu(
   fontWeight: FontWeight.w900,
 );

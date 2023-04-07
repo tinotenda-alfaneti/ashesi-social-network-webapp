@@ -1,5 +1,6 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
 import 'package:ashesi_social_network/constants/routes.dart';
+import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,6 +27,7 @@ class _LogInPageState extends State<LogInPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
 
+    TextEditingController _controller = TextEditingController();
     return Scaffold(
       backgroundColor: themeColor,
       body: Center(
@@ -60,41 +62,30 @@ class _LogInPageState extends State<LogInPage> {
                     height: 50,
                   ),
 
-                  const Center(
+                  Center(
                     child: Text(
                       "Welcome",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: textFieldStyle,
                     ),
                   ),
 
-                  //Email input field
-                  const Padding(
-                    //space around the field
-                    padding: EdgeInsets.only(
-                        left: 15.0, right: 15.0, top: 30, bottom: 0),
-                    child: TextField(
-                      // controller: _email,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                      ),
-                    ),
+                  CustomTextField(
+                    labelText: "Email Address",
+                    fieldController: _controller,
+                    keyboardType: TextInputType.text,
                   ),
 
                   //password input field
-                  const Padding(
-                    padding: EdgeInsets.only(
+                  Padding(
+                    padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, top: 30, bottom: 0),
                     child: TextField(
                       // controller: _password,
+                      style: textFieldStyle,
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Password',
                       ),
