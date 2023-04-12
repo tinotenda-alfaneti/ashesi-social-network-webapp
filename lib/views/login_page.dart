@@ -1,8 +1,12 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
+import 'package:ashesi_social_network/constants/error_dialogs/show_error_dialog.dart';
 import 'package:ashesi_social_network/constants/routes.dart';
 import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
+import 'package:ashesi_social_network/services/auth_service/auth_exceptions.dart';
+import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -12,13 +16,20 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
+  late final TextEditingController _email;
+  late final TextEditingController _password;
+
   @override
   void initState() {
+    _email = TextEditingController();
+    _password = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    _email.dispose();
+    _password.dispose();
     super.dispose();
   }
 
@@ -27,7 +38,6 @@ class _LogInPageState extends State<LogInPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
 
-    TextEditingController _controller = TextEditingController();
     return Scaffold(
       backgroundColor: themeColor,
       body: Center(
@@ -48,7 +58,7 @@ class _LogInPageState extends State<LogInPage> {
             alignment: Alignment.center,
             constraints: BoxConstraints(
               maxHeight: double.infinity,
-              maxWidth: MediaQuery.of(context).size.width * 0.3,
+              maxWidth: MediaQuery.of(context).size.width * 0.5,
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -71,7 +81,7 @@ class _LogInPageState extends State<LogInPage> {
 
                   CustomTextField(
                     labelText: "Email Address",
-                    fieldController: _controller,
+                    fieldController: _email,
                     keyboardType: TextInputType.text,
                   ),
 
@@ -80,7 +90,7 @@ class _LogInPageState extends State<LogInPage> {
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, top: 30, bottom: 0),
                     child: TextField(
-                      // controller: _password,
+                      controller: _password,
                       style: textFieldStyle,
                       obscureText: true,
                       enableSuggestions: false,
@@ -104,9 +114,31 @@ class _LogInPageState extends State<LogInPage> {
                           color: themeColor,
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              homeRoute, (route) => false);
+                        onPressed: () async {
+                          final email = _email.text;
+                          final password = _password.text;
+                          try {
+                            await FirebaseAuthService().logIn(
+                              email: email,
+                              password: password,
+                            );
+                            context.go('/home');
+                          } on UserNotFoundAuthException {
+                            await showErrorDialog(
+                              context,
+                              "User not found",
+                            );
+                          } on WrongPasswordAuthException {
+                            await showErrorDialog(
+                              context,
+                              "Wrong password",
+                            );
+                          } on GenericAuthException {
+                            await showErrorDialog(
+                              context,
+                              'Authentication error',
+                            );
+                          }
                         },
                         child: const Text(
                           'Log in',
@@ -124,8 +156,7 @@ class _LogInPageState extends State<LogInPage> {
                   //adding button to switch to register screen
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          signUpRoute, (route) => false);
+                      context.go('/signup');
                     },
                     child: const Text(
                       'Not registered yet? Sign up',

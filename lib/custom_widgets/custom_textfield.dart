@@ -29,7 +29,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+          const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 5),
       child: TextField(
         style: textFieldStyle,
         controller: fieldController,

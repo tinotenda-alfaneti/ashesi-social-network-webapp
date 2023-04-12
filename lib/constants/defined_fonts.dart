@@ -25,4 +25,13 @@ TextStyle navButtonsStyle = GoogleFonts.ubuntu(
   fontSize: 20,
 );
 
+TextStyle profileNameStyle = GoogleFonts.ubuntu(
+    fontSize: 30.0, letterSpacing: 0.70, fontWeight: FontWeight.w400);
+
+TextStyle profileOtherStyle = GoogleFonts.ubuntu(
+    fontSize: 18.0,
+    color: Colors.black45,
+    letterSpacing: 0.7,
+    fontWeight: FontWeight.w300);
+
 const themeColor = Color.fromARGB(255, 105, 4, 4);

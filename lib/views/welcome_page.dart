@@ -1,6 +1,7 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
 import 'package:ashesi_social_network/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -79,7 +80,7 @@ class _IndexPageState extends State<IndexPage> {
                     backgroundColor: themeColor,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed(signUpRoute);
+                    context.go('/signup');
                   },
                   child: Text(
                     "Sign up",

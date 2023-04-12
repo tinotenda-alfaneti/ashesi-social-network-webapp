@@ -1,6 +1,10 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
-import 'package:ashesi_social_network/constants/routes.dart';
+import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
+import 'package:ashesi_social_network/services/firebase_controller.dart';
+import 'package:ashesi_social_network/services/message_structure.dart';
+import 'package:ashesi_social_network/views/message_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final FirebaseDbService _dBService;
+
+  @override
+  void initState() {
+    _dBService = FirebaseDbService();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -40,21 +52,44 @@ class _HomePageState extends State<HomePage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(profileRoute);
+                    context.go('/home/profile');
                   },
                   child: Text(
                     "Profile",
                     style: navButtonsStyle,
                   )),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    context.go('/login');
+                    await FirebaseAuthService().logOut();
+                  },
                   child: Text(
                     "Logout",
                     style: navButtonsStyle,
                   )),
             ],
           ),
-          body: Column(),
+          body: StreamBuilder(
+            stream: _dBService.allMessages(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.active:
+                  if (snapshot.hasData) {
+                    final allMessages = snapshot.data as Iterable<Message>;
+                    return MessagesListView(
+                      messages: allMessages,
+                      onTap: (message) {},
+                      onDeleteMessage: (message) {},
+                    );
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                default:
+                  return const CircularProgressIndicator();
+              }
+            },
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             child: const Icon(
