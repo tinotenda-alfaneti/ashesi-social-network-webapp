@@ -1,6 +1,7 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
 import 'package:ashesi_social_network/constants/error_dialogs/show_error_dialog.dart';
 import 'package:ashesi_social_network/constants/error_dialogs/show_loading_dialog.dart';
+import 'package:ashesi_social_network/constants/routes.dart';
 import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
 import 'package:ashesi_social_network/services/api_controller.dart';
 import 'package:ashesi_social_network/services/auth_service/auth_exceptions.dart';
@@ -205,9 +206,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               FocusScope.of(context).requestFocus(FocusNode());
                               showDatePicker(
                                       context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2023),
-                                      lastDate: DateTime(2070))
+                                      initialDate: DateTime(2000),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2030))
                                   .then(
                                 (selectedDate) {
                                   if (selectedDate != null) {

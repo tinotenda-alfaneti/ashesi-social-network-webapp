@@ -10,6 +10,7 @@ import json
 firebase_admin.initialize_app()
 db = firestore.client()
 users_db = db.collection('users')
+messages_db = db.collection('messages')
 
 @functions_framework.http
 def ash_network(request):
@@ -23,6 +24,12 @@ def ash_network(request):
     
     if (request.method == 'PUT' or request.method == 'PATCH') and '/profile' in request.path:
         return update_user()
+    
+    if request.method == 'POST' and '/message' in request.path:
+        return create_message()
+    
+    else:
+        return jsonify({"Error":"Request Error"}), 503
 
 
 def get_user_profile(email):
@@ -106,6 +113,24 @@ def update_user():
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Content-Type"] = "application/json"
         return response, 200
+    except:
+        response = jsonify({'ERROR': 'Unknown Error'})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Content-Type"] = "application/json"
+        return response, 503
+    
+
+def create_message():
+
+    try:
+    
+        new_message = json.loads(request.data)
+        messages_db.document().set(new_message)
+        response = jsonify(new_message)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Content-Type"] = "application/json"
+        return response, 200
+    
     except:
         response = jsonify({'ERROR': 'Unknown Error'})
         response.headers["Access-Control-Allow-Origin"] = "*"

@@ -21,7 +21,7 @@ final GoRouter _router = GoRouter(
         path: '/home',
         redirect: (BuildContext context, GoRouterState state) {
           if (FirebaseAuthService().currentUser == null) {
-            context.go('/signin');
+            return '/signin';
           } else {
             return null;
           }
@@ -34,7 +34,7 @@ final GoRouter _router = GoRouter(
             path: 'profile',
             redirect: (BuildContext context, GoRouterState state) {
               if (FirebaseAuthService().currentUser == null) {
-                context.go('/signin');
+                return '/signin';
               } else {
                 return null;
               }

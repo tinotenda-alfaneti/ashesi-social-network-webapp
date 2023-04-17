@@ -35,7 +35,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: fieldController,
         enableSuggestions: false,
         autocorrect: false,
-        keyboardType: TextInputType.phone,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: labelText,

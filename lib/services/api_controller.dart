@@ -30,7 +30,6 @@ class ApiController {
           'best-food': bestFood,
           'compass-resident': compassRes,
           'class': yearClass,
-          // 'image-url': imageUrl,
           'full-name': fullName,
           'email': email
         },
@@ -62,18 +61,23 @@ class ApiController {
     required final String major,
     required final String bestMovie,
     required final String bestFood,
-    // required final String compassRes,
-    // required final String imageUrl,
   }) async {
     try {
-      final http.Response response = await http.put(
+      final http.Response response = await http.patch(
         Uri.parse(
-            'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile'), //unique identifier of the API (Cloud Firebase Legacy)
+            'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile'),
+
+        // headers: {
+        //   'Content-Type': "application/json",
+        //   "Access-Control-Allow-Origin": "*",
+        //   "Access-Control-Allow-Credentials": "true",
+        //   "Access-Control-Allow-Methods": "PUT, OPTIONS"
+        // },
 
         //body - in Json format
 
         body: jsonEncode(
-          <String, dynamic>{
+          <String, String>{
             'student-id': studentID,
             'major': major,
             'best-movie': bestMovie,
@@ -90,6 +94,33 @@ class ApiController {
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> createNewMessage(
+      {required final String email,
+      required final String datePosted,
+      required final String messageBody,
+      required final String fullName}) async {
+    final http.Response response = await http.post(
+      Uri.parse(
+          'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/message'), //unique identifier of the API (Cloud Firebase Legacy)
+
+      //body - in Json format
+      body: jsonEncode(
+        <String, dynamic>{
+          'date-send': datePosted,
+          'message-body': messageBody,
+          'sender-name': fullName,
+          'sender-email': email
+        },
+      ),
+    );
+    debugPrint(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
       return false;
     }
   }
