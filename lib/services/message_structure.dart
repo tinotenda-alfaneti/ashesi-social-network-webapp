@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+//create a class representation of the cloud message
 @immutable
 class Message {
   final String documentId;
@@ -17,6 +18,7 @@ class Message {
     required this.senderEmail,
   });
 
+  //specify how the message should be formed from a snapshot
   Message.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
         dateSend = snapshot.data()['date-send'],

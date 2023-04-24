@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ashesi_social_network/constants/defined_fonts.dart';
-import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
+import 'package:ashesi_social_network/utils/custom_styles.dart';
+import 'package:ashesi_social_network/utils/custom_widgets/custom_textfield.dart';
 import 'package:ashesi_social_network/services/api_controller.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:ashesi_social_network/services/firebase_controller.dart';
@@ -91,8 +91,13 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.hasData) {
                           final allMessages =
                               snapshot.data as Iterable<Message>;
+                          final sortedMessages = allMessages.toList();
+                          sortedMessages.sort((a, b) =>
+                              DateTime.parse(a.dateSend)
+                                  .compareTo(DateTime.parse(b.dateSend)));
                           return MessagesListView(
-                            messages: allMessages,
+                            messages: sortedMessages,
+                            //.toList().sort(((a, b) => ))
                             onTap: (message) {},
                             onDeleteMessage: (message) {},
                           );
@@ -151,10 +156,9 @@ class _HomePageState extends State<HomePage> {
                               .createNewMessage(
                                   email:
                                       FirebaseAuthService().currentUser!.email,
-                                  datePosted:
-                                      DateFormat('EEE, MMM d yyyy, h:mm a')
-                                          .format(DateTime.now())
-                                          .toString(),
+                                  datePosted: DateFormat('yyyy-MM-dd HH:mm:ss')
+                                      .format(DateTime.now())
+                                      .toString(),
                                   messageBody: _messageController.text,
                                   fullName: userData['full-name']);
                           if (wasSuccessful) {

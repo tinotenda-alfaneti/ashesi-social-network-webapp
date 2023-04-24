@@ -6,12 +6,13 @@ from flask import request, jsonify
 
 import json
 
-
+# initializations
 firebase_admin.initialize_app()
 db = firestore.client()
 users_db = db.collection('users')
 messages_db = db.collection('messages')
 
+# function to be deployed to google cloud functions
 @functions_framework.http
 def ash_network(request):
 
@@ -22,15 +23,18 @@ def ash_network(request):
     if request.method == 'POST' and '/profile' in request.path:
         return create_user()
     
-    if (request.method == 'PUT' or request.method == 'PATCH') and '/profile' in request.path:
+    if request.method == 'POST' and '/userUpdate' in request.path:
         return update_user()
     
     if request.method == 'POST' and '/message' in request.path:
         return create_message()
     
+    if request.method == 'DELETE' and '/message' in request.path:
+        id = request.path.split('/')[-1]
+        return delete_message(id)
+    
     else:
         return jsonify({"Error":"Request Error"}), 503
-
 
 def get_user_profile(email):
 
@@ -136,3 +140,25 @@ def create_message():
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Content-Type"] = "application/json"
         return response, 503
+    
+
+def delete_message(id):
+
+    try:
+
+        deleted_record = messages_db.document(id).get().to_dict()
+        messages_db.document(id).delete()
+        response = jsonify(deleted_record)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Content-Type"] = "application/json"
+        return response, 200
+    
+    except:
+        response = jsonify({'ERROR': 'Unknown Error'})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Content-Type"] = "application/json"
+        return response, 503
+    
+
+
+

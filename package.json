@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "emailjs": "^4.0.1",
+    "eslint": "^8.39.0",
+    "firebase-admin": "^11.7.0",
+    "lint": "^1.1.2"
+  }
+}

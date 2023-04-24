@@ -1,5 +1,5 @@
-import 'package:ashesi_social_network/constants/defined_fonts.dart';
-import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
+import 'package:ashesi_social_network/utils/custom_styles.dart';
+import 'package:ashesi_social_network/utils/custom_widgets/custom_textfield.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ashesi_social_network/services/api_controller.dart';

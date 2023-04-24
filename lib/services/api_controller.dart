@@ -1,9 +1,11 @@
-import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// class to make requests to the my API
 class ApiController {
+
+  //function to create a new user - sending a post request to the API
   Future<bool> createNewUser(
       {required final String email,
       required final String studentID,
@@ -18,7 +20,7 @@ class ApiController {
       required final String fullName}) async {
     final http.Response response = await http.post(
       Uri.parse(
-          'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile'), //unique identifier of the API (Cloud Firebase Legacy)
+          'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile'),
 
       //body - in Json format
       body: jsonEncode(
@@ -43,6 +45,8 @@ class ApiController {
     }
   }
 
+
+  //fundtion to retrieve a user from the database using the API
   Future<http.Response?> getUser({required String email}) async {
     try {
       String url =
@@ -55,6 +59,7 @@ class ApiController {
     }
   }
 
+  //function to update an existing user
   Future<bool> updateUser({
     required final String email,
     required final String studentID,
@@ -63,21 +68,11 @@ class ApiController {
     required final String bestFood,
   }) async {
     try {
-      final http.Response response = await http.patch(
+      final http.Response response = await http.post(
         Uri.parse(
-            'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile'),
-
-        // headers: {
-        //   'Content-Type': "application/json",
-        //   "Access-Control-Allow-Origin": "*",
-        //   "Access-Control-Allow-Credentials": "true",
-        //   "Access-Control-Allow-Methods": "PUT, OPTIONS"
-        // },
-
-        //body - in Json format
-
+            'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/userUpdate'),
         body: jsonEncode(
-          <String, String>{
+          <String, dynamic>{
             'student-id': studentID,
             'major': major,
             'best-movie': bestMovie,
@@ -98,6 +93,7 @@ class ApiController {
     }
   }
 
+  //function to create a new message
   Future<bool> createNewMessage(
       {required final String email,
       required final String datePosted,
@@ -122,6 +118,24 @@ class ApiController {
       return true;
     } else {
       return false;
+    }
+  }
+
+  //function to delete a message
+  Future<http.Response?> deleteMessage({required String msgId}) async {
+    try {
+      String url =
+          'https://us-central1-ash-social-net.cloudfunctions.net/ash_network/message/$msgId';
+      final http.Response response = await http.delete(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
   }
 }

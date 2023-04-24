@@ -1,5 +1,4 @@
-import 'package:ashesi_social_network/constants/defined_fonts.dart';
-import 'package:ashesi_social_network/constants/routes.dart';
+import 'package:ashesi_social_network/utils/custom_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,56 +38,58 @@ class _IndexPageState extends State<IndexPage> {
               style: appBarFont,
             ),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  "Welcome",
-                  style: headingStyle,
-                ),
-              ),
-              Center(
-                child: Text(
-                  "to",
-                  style: headingStyle,
-                ),
-              ),
-              Center(
-                child: Text(
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  "Ashesi Social Network",
-                  style: headingStyle,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 15.0,
-                  right: 10.0,
-                  top: 30,
-                  bottom: 15,
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 20,
-                    shadowColor: Colors.red,
-                    padding: const EdgeInsets.all(15.0),
-                    backgroundColor: themeColor,
-                  ),
-                  onPressed: () {
-                    context.go('/signup');
-                  },
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
                   child: Text(
-                    "Sign up",
-                    style: buttonsStyle,
+                    "Welcome",
+                    style: headingStyle,
                   ),
                 ),
-              )
-            ],
+                Center(
+                  child: Text(
+                    "to",
+                    style: headingStyle,
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    "Ashesi Social Network",
+                    style: headingStyle,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15.0,
+                    right: 10.0,
+                    top: 30,
+                    bottom: 15,
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 20,
+                      shadowColor: Colors.red,
+                      padding: const EdgeInsets.all(15.0),
+                      backgroundColor: themeColor,
+                    ),
+                    onPressed: () {
+                      context.go('/signup');
+                    },
+                    child: Text(
+                      "Sign up",
+                      style: buttonsStyle,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ],

@@ -1,7 +1,6 @@
-import 'package:ashesi_social_network/constants/defined_fonts.dart';
-import 'package:ashesi_social_network/constants/error_dialogs/show_error_dialog.dart';
-import 'package:ashesi_social_network/constants/routes.dart';
-import 'package:ashesi_social_network/custom_widgets/custom_textfield.dart';
+import 'package:ashesi_social_network/utils/custom_styles.dart';
+import 'package:ashesi_social_network/utils/custom_dialogs/show_error_dialog.dart';
+import 'package:ashesi_social_network/utils/custom_widgets/custom_textfield.dart';
 import 'package:ashesi_social_network/services/auth_service/auth_exceptions.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:flutter/material.dart';

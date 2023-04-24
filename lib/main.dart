@@ -21,7 +21,7 @@ final GoRouter _router = GoRouter(
         path: '/home',
         redirect: (BuildContext context, GoRouterState state) {
           if (FirebaseAuthService().currentUser == null) {
-            return '/signin';
+            return '/login';
           } else {
             return null;
           }
@@ -34,7 +34,7 @@ final GoRouter _router = GoRouter(
             path: 'profile',
             redirect: (BuildContext context, GoRouterState state) {
               if (FirebaseAuthService().currentUser == null) {
-                return '/signin';
+                return '/login';
               } else {
                 return null;
               }
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
-      title: 'Final Project',
+      title: 'Ashesi Social Network',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),

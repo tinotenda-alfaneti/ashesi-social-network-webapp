@@ -1,3 +1,0 @@
-https://us-central1-ash-social-net.cloudfunctions.net/ash_network/profile
-
-gcloud functions deploy hello_http --runtime python311 --trigger-http --allow-unauthenticated

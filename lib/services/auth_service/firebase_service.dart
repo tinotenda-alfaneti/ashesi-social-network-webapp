@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:flutter/material.dart';
 
 class FirebaseAuthService {
+  //creating user - authentication
   Future<AuthUser> createUser({
     required String email,
     required String password,
@@ -38,6 +39,7 @@ class FirebaseAuthService {
     }
   }
 
+  // getter for current logged in user
   AuthUser? get currentUser {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -47,6 +49,7 @@ class FirebaseAuthService {
     }
   }
 
+  //function to log in user
   Future<AuthUser> logIn({
     required String email,
     required String password,
@@ -75,6 +78,7 @@ class FirebaseAuthService {
     }
   }
 
+  //function to logout user
   Future<void> logOut() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -84,6 +88,7 @@ class FirebaseAuthService {
     }
   }
 
+  //function to send reset password
   Future<void> sendResetPassword({required String email}) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -93,6 +98,7 @@ class FirebaseAuthService {
     }
   }
 
+  //function to initiliaze firebase
   Future<void> initialize() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,

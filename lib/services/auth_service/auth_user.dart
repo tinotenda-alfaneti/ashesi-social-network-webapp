@@ -10,6 +10,7 @@ class AuthUser {
     required this.email,
   });
 
+  //  factory method that creates an instance of the AuthUser class by taking a User object from Firebase Authentication
   factory AuthUser.fromFirebase(User user) => AuthUser(
         email: user.email!,
         id: user.uid,

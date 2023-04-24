@@ -1,4 +1,5 @@
 import 'package:ashesi_social_network/constants/defined_fonts.dart';
+import 'package:ashesi_social_network/services/api_controller.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:ashesi_social_network/services/message_structure.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 typedef MessageCallBack = void Function(Message note);
 
 class MessagesListView extends StatefulWidget {
-  final Iterable<Message> messages;
+  final List<Message> messages;
   final MessageCallBack onTap;
   final MessageCallBack onDeleteMessage;
 
@@ -34,7 +35,7 @@ class _MessagesListViewState extends State<MessagesListView> {
       padding: const EdgeInsets.only(top: 16),
       itemCount: widget.messages.length,
       itemBuilder: (context, index) {
-        final message = widget.messages.elementAt(index);
+        final message = widget.messages[index];
         MainAxisAlignment side;
         if (message.senderEmail == FirebaseAuthService().currentUser!.email) {
           side = MainAxisAlignment.end;
@@ -125,7 +126,13 @@ class _MessagesListViewState extends State<MessagesListView> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (message.senderEmail ==
+                                FirebaseAuthService().currentUser!.email) {
+                              await ApiController()
+                                  .deleteMessage(msgId: message.documentId);
+                            }
+                          },
                           icon: const Icon(Icons.delete),
                         )
                       ],
