@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _value.text =
                     responseData["compass-resident"] == "true" ? "yes" : "no";
                 _class.text = responseData['class'];
-                _dob.text = responseData['dob'];
+                // _dob.text = responseData['dob'];
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -256,6 +256,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             "Staying on Campus should be yes or no",
                                           );
                                         } else {
+                                          final dateOfBirth = _dob.text.isEmpty
+                                              ? responseData['dob']
+                                              : _dob.text;
                                           final wasUpdated =
                                               await ApiController().updateUser(
                                             email: responseData['email'],
@@ -266,24 +269,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                             bestMovie: _bestMovie.text,
                                             campusResident: _value.text,
                                             yearClass: _class.text,
+                                            dob: dateOfBirth,
                                           );
 
                                           if (wasUpdated) {
-                                            final snackbar = SnackBar(
-                                              content: Text(
-                                                'Profile updated Successfully',
-                                                style: appBarFont,
-                                              ),
-                                              backgroundColor: themeColor,
-                                              elevation: 5,
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-
-                                            setState(() {});
+                                            setState(() {
+                                              final snackbar = SnackBar(
+                                                content: Text(
+                                                  'Profile updated Successfully',
+                                                  style: appBarFont,
+                                                ),
+                                                backgroundColor: themeColor,
+                                                elevation: 5,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackbar);
+                                            });
                                           }
                                         }
-                                        setState(() {});
+                                        // setState(() {});
                                       },
                                       child: const Text(
                                         'Update',

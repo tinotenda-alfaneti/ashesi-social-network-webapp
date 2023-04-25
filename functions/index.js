@@ -15,7 +15,6 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-
 exports.sendEmail = functions.firestore.document('messages/{docId}')
 .onCreate(async (snap,context)=>{
     const data=snap.data();
@@ -40,7 +39,6 @@ exports.sendEmail = functions.firestore.document('messages/{docId}')
 
         const mailOptions = {
             from: `ashsocialnet@gmail.com`,
-            // to: snap.data().email,
             to:`${users.at(i)}`,
             subject: 'Ashesi Notification',
             text:`Hi!\n${data['sender-name']} made a post on Ashesi Social Network.\nGo and check it out\n\nRegards,\nASN Admin`,

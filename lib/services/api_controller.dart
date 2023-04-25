@@ -66,6 +66,7 @@ class ApiController {
     required final String bestFood,
     required final String campusResident,
     required final String yearClass,
+    required final String dob,
   }) async {
     final residentValue =
         campusResident.toLowerCase() == "yes" ? "true" : "false";
@@ -82,6 +83,7 @@ class ApiController {
             'email': email,
             'compass-resident': residentValue,
             'class': yearClass,
+            'dob': dob
           },
         ),
       );
