@@ -322,6 +322,19 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else {
                             try {
+                              final snackbar = SnackBar(
+                                duration: const Duration(seconds: 5),
+                                content: Text(
+                                  'Almost done, Please wait...',
+                                  style: GoogleFonts.ubuntu(
+                                    color: themeColor,
+                                  ),
+                                ),
+                                backgroundColor: Colors.white,
+                                elevation: 5,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
                               await creatingUser(
                                 email: email,
                                 password: password,
@@ -339,20 +352,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 showLoadingDialog(
                                     context: context, text: "Creating User");
                               }
-
-                              final snackbar = SnackBar(
-                                duration: const Duration(seconds: 10),
-                                content: Text(
-                                  'Almost done, Please wait...',
-                                  style: GoogleFonts.ubuntu(
-                                    color: themeColor,
-                                  ),
-                                ),
-                                backgroundColor: Colors.white,
-                                elevation: 5,
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar);
 
                               context.go('/login');
                             } on WeakPasswordAuthException {

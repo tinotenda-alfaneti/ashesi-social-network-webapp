@@ -17,10 +17,11 @@ class _IndexPageState extends State<IndexPage> {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: const Opacity(
+          child: Opacity(
             opacity: 0.25,
             child: Image(
-              image: AssetImage('images/home_background.jpg'),
+              image: Image.asset('assets/images/home_background.jpg').image,
+              // image: AssetImage('images/home_background.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -29,8 +30,9 @@ class _IndexPageState extends State<IndexPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: themeColor,
-            leading: const CircleAvatar(
-              backgroundImage: AssetImage('images/ashesi_logo.jpg'),
+            leading: CircleAvatar(
+              backgroundImage:
+                  Image.asset('assets/images/ashesi_logo.jpg').image,
               maxRadius: 25,
             ),
             title: Text(

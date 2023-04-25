@@ -90,10 +90,11 @@ class _MessagesListViewState extends State<MessagesListView> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            image: const DecorationImage(
+                                            image: DecorationImage(
                                               //TODO: Load profile image
-                                              image: AssetImage(
-                                                  "images/default_user.png"), //TODO: Load profile image
+                                              image: Image.asset(
+                                                      'assets/images/default_user1.png')
+                                                  .image, //TODO: Load profile image
                                               fit: BoxFit.fill,
                                             ),
                                           ),

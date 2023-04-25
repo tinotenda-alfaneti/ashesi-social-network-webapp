@@ -9,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -22,14 +24,16 @@ class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController _bestMovie;
   late http.Response _response;
   late final TextEditingController _value;
-  late final TextEditingController _fullName;
+  late final TextEditingController _class;
+  late final TextEditingController _dob;
   @override
   void initState() {
     _major = TextEditingController();
     _bestFood = TextEditingController();
     _bestMovie = TextEditingController();
     _value = TextEditingController();
-    _fullName = TextEditingController();
+    _class = TextEditingController();
+    _dob = TextEditingController();
     super.initState();
   }
 
@@ -74,7 +78,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 _bestMovie.text = responseData["best-movie"];
                 _value.text =
                     responseData["compass-resident"] == "true" ? "yes" : "no";
-                _fullName.text = responseData['full-name'];
+                _class.text = responseData['class'];
+                _dob.text = responseData['dob'];
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -89,9 +94,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: MediaQuery.of(context).size.width * 0.2,
                                 // height: 180,
                                 alignment: const Alignment(0.0, 0.0),
-                                child: const CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage("images/default_user1.png"),
+                                child: CircleAvatar(
+                                  backgroundImage: Image.asset(
+                                          'assets/images/default_user1.png')
+                                      .image,
                                   radius: 80.0,
                                 ),
                               ),
@@ -104,24 +110,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MediaQuery.of(context).size.width * 0.4,
                                   child: Column(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0,
-                                            right: 15.0,
-                                            top: 15,
-                                            bottom: 5),
-                                        child: TextField(
-                                          textAlign: TextAlign.center,
-                                          style: profileNameStyle,
-                                          controller: _fullName,
-                                          enableSuggestions: false,
-                                          autocorrect: false,
-                                          keyboardType: TextInputType.text,
-                                          decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "Name",
-                                          ),
-                                        ),
+                                      Text(
+                                        '${responseData["full-name"]}',
+                                        style: profileNameStyle,
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -160,7 +151,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.only(
+                            top: 30.0, bottom: 15.0, right: 15.0, left: 15.0),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: SingleChildScrollView(
@@ -169,6 +161,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 CustomTextField(
                                   labelText: "Major",
                                   fieldController: _major,
+                                  keyboardType: TextInputType.text,
+                                ),
+                                CustomTextField(
+                                  labelText: "Class",
+                                  fieldController: _class,
                                   keyboardType: TextInputType.text,
                                 ),
                                 CustomTextField(
@@ -183,6 +180,41 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 const SizedBox(
                                   height: 10,
+                                ),
+                                Padding(
+                                  // space around the field
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15.0,
+                                      top: 15,
+                                      bottom: 0),
+                                  child: TextField(
+                                    style: textFieldStyle,
+                                    controller: _dob,
+                                    keyboardType: TextInputType.text,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Date Of Birth',
+                                      suffixIcon: Icon(Icons.calendar_month),
+                                    ),
+                                    onTap: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime(2000),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2030))
+                                          .then(
+                                        (selectedDate) {
+                                          if (selectedDate != null) {
+                                            _dob.text = DateFormat.yMMMEd()
+                                                .format(selectedDate);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
                                 CustomTextField(
                                   labelText: "Staying on Campus?",
@@ -211,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             _bestFood.text.isEmpty ||
                                             _bestMovie.text.isEmpty ||
                                             _value.text.isEmpty ||
-                                            _fullName.text.isEmpty) {
+                                            _class.text.isEmpty) {
                                           await showErrorDialog(
                                             context,
                                             "Cannot update with empty field(s)",
@@ -233,10 +265,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                             bestFood: _bestFood.text,
                                             bestMovie: _bestMovie.text,
                                             campusResident: _value.text,
-                                            fullName: _fullName.text,
+                                            yearClass: _class.text,
                                           );
 
                                           if (wasUpdated) {
+                                            final snackbar = SnackBar(
+                                              content: Text(
+                                                'Profile updated Successfully',
+                                                style: appBarFont,
+                                              ),
+                                              backgroundColor: themeColor,
+                                              elevation: 5,
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackbar);
+
                                             setState(() {});
                                           }
                                         }

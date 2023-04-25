@@ -6,9 +6,11 @@ import 'package:ashesi_social_network/services/api_controller.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:ashesi_social_network/services/firebase_controller.dart';
 import 'package:ashesi_social_network/services/message_structure.dart';
+import 'package:ashesi_social_network/utils/custom_widgets/custom_textfield.dart';
 import 'package:ashesi_social_network/views/message_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,6 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final FirebaseDbService _dBService;
   final _messageController = TextEditingController();
+  final _emailController = TextEditingController();
 
   @override
   void initState() {
@@ -35,10 +38,10 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: const Opacity(
+          child: Opacity(
             opacity: 1,
             child: Image(
-              image: AssetImage('images/home_background.jpg'),
+              image: Image.asset('assets/images/home_background.jpg').image,
               fit: BoxFit.cover,
               // color: themeColor,
               filterQuality: FilterQuality.high,
@@ -50,8 +53,9 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: themeColor,
-            leading: const CircleAvatar(
-              backgroundImage: AssetImage('images/ashesi_logo.jpg'),
+            leading: CircleAvatar(
+              backgroundImage:
+                  Image.asset('assets/images/ashesi_logo.jpg').image,
               maxRadius: 25,
             ),
             title: Text(
@@ -124,31 +128,42 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SingleChildScrollView(
                           child: Container(
-                            color: Colors.white,
-                            width: MediaQuery.of(context).size.width * 0.85,
+                            color: Colors.transparent,
+                            width: MediaQuery.of(context).size.width * 0.50,
                             child: TextField(
                               style: textFieldStyle,
                               controller: _messageController,
-                              enableSuggestions: false,
+                              enableSuggestions: true,
                               autocorrect: false,
                               keyboardType: TextInputType.multiline,
-                              maxLines: 3,
+                              maxLines: 2,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10))),
-                                  hintText: "Type your message",
+                                  // hintText: "Type your message",
+                                  labelText: "Type your message",
                                   fillColor: Colors.white),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.04,
+                        Container(
+                          color: Colors.transparent,
+                          width: MediaQuery.of(context).size.width * 0.30,
+                          child: CustomTextField(
+                            labelText: "Enter email address",
+                            fieldController: _emailController,
+                            keyboardType: TextInputType.text,
+                          ),
                         ),
+                        // SizedBox(
+                        //   width: MediaQuery.of(context).size.width * 0.04,
+                        // ),
                         Container(
                           height: 40,
+                          width: 60,
                           // height: MediaQuery.of(context).size.height * 0.05,
-                          width: MediaQuery.of(context).size.width * 0.08,
+                          // width: MediaQuery.of(context).size.width * 0.08,
                           decoration: BoxDecoration(
                               color: themeColor,
                               borderRadius: BorderRadius.circular(5.0)),
@@ -159,6 +174,21 @@ class _HomePageState extends State<HomePage> {
                                   final snackbar = SnackBar(
                                     content: Text(
                                       'Cannot send an empty post',
+                                      style: appBarFont,
+                                    ),
+                                    backgroundColor: themeColor,
+                                    elevation: 5,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbar);
+                                } else if (_emailController.text.isNotEmpty &&
+                                    _emailController.text !=
+                                        FirebaseAuthService()
+                                            .currentUser!
+                                            .email) {
+                                  final snackbar = SnackBar(
+                                    content: Text(
+                                      'Email is incorrect, use the one you used for logging in',
                                       style: appBarFont,
                                     ),
                                     backgroundColor: themeColor,
@@ -186,15 +216,30 @@ class _HomePageState extends State<HomePage> {
                                           fullName: userData['full-name']);
                                   if (wasSuccessful) {
                                     _messageController.clear();
+                                    _emailController.clear();
+
+                                    final snackbar = SnackBar(
+                                      duration: const Duration(seconds: 5),
+                                      content: Text(
+                                        'Posted successfully...',
+                                        style: GoogleFonts.ubuntu(
+                                          color: themeColor,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      elevation: 5,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackbar);
                                   }
                                 }
                               },
                               child: const Text(
-                                textAlign: TextAlign.center,
+                                // textAlign: TextAlign.center,
                                 'Post',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                 ),
                               ),
                             ),

@@ -65,8 +65,9 @@ class _LogInPageState extends State<LogInPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('images/ashesi_logo.jpg'),
+                  CircleAvatar(
+                    backgroundImage:
+                        Image.asset('assets/images/ashesi_logo.jpg').image,
                     maxRadius: 70,
                   ),
                   const SizedBox(
@@ -131,6 +132,19 @@ class _LogInPageState extends State<LogInPage> {
                             );
                           } else {
                             try {
+                              final snackbar = SnackBar(
+                                // duration: const Duration(seconds: 5),
+                                content: Text(
+                                  'Almost done, Please wait...',
+                                  style: GoogleFonts.ubuntu(
+                                    color: themeColor,
+                                  ),
+                                ),
+                                backgroundColor: Colors.white,
+                                elevation: 5,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
                               await FirebaseAuthService().logIn(
                                 email: email,
                                 password: password,
