@@ -1,3 +1,4 @@
+import 'package:ashesi_social_network/utils/constants.dart';
 import 'package:ashesi_social_network/utils/custom_styles.dart';
 import 'package:ashesi_social_network/utils/custom_dialogs/show_error_dialog.dart';
 import 'package:ashesi_social_network/utils/custom_widgets/custom_textfield.dart';
@@ -6,6 +7,7 @@ import 'package:ashesi_social_network/services/auth_service/firebase_service.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -116,27 +118,40 @@ class _LogInPageState extends State<LogInPage> {
                         onPressed: () async {
                           final email = _email.text;
                           final password = _password.text;
-                          try {
-                            await FirebaseAuthService().logIn(
-                              email: email,
-                              password: password,
-                            );
-                            context.go('/home');
-                          } on UserNotFoundAuthException {
+
+                          if (email.isEmpty || password.isEmpty) {
                             await showErrorDialog(
                               context,
-                              "User not found",
+                              "All fields are required",
                             );
-                          } on WrongPasswordAuthException {
+                          } else if (emailRegex.hasMatch(email) == false) {
                             await showErrorDialog(
                               context,
-                              "Wrong password",
+                              "Invalid email address",
                             );
-                          } on GenericAuthException {
-                            await showErrorDialog(
-                              context,
-                              'Authentication error',
-                            );
+                          } else {
+                            try {
+                              await FirebaseAuthService().logIn(
+                                email: email,
+                                password: password,
+                              );
+                              context.go('/home');
+                            } on UserNotFoundAuthException {
+                              await showErrorDialog(
+                                context,
+                                "User not found",
+                              );
+                            } on WrongPasswordAuthException {
+                              await showErrorDialog(
+                                context,
+                                "Wrong password",
+                              );
+                            } on GenericAuthException {
+                              await showErrorDialog(
+                                context,
+                                'Authentication error',
+                              );
+                            }
                           }
                         },
                         child: const Text(

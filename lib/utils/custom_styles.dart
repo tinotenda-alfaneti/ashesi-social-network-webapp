@@ -1,4 +1,3 @@
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +26,10 @@ TextStyle navButtonsStyle = GoogleFonts.ubuntu(
 );
 
 TextStyle profileNameStyle = GoogleFonts.ubuntu(
-    fontSize: 30.0, letterSpacing: 0.70, fontWeight: FontWeight.w400);
+  fontSize: 30.0,
+  letterSpacing: 0.70,
+  fontWeight: FontWeight.w400,
+);
 
 TextStyle profileOtherStyle = GoogleFonts.ubuntu(
     fontSize: 18.0,

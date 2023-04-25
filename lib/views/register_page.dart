@@ -1,3 +1,4 @@
+import 'package:ashesi_social_network/utils/constants.dart';
 import 'package:ashesi_social_network/utils/custom_styles.dart';
 import 'package:ashesi_social_network/utils/custom_dialogs/show_error_dialog.dart';
 import 'package:ashesi_social_network/utils/custom_dialogs/show_loading_dialog.dart';
@@ -8,6 +9,7 @@ import 'package:ashesi_social_network/services/auth_service/firebase_service.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -283,50 +285,99 @@ class _SignUpPageState extends State<SignUpPage> {
                           final String compassRes = _value.toString();
                           final String password = _password.text;
                           final String yearClass = _class.text;
-                          // final imageUrl = _uploadedFileURL;
+                          // final imageUrl = _uploadedFileURL; TODO: Add profile image
                           final String fullName = _fullname.text;
-                          try {
-                            await creatingUser(
-                              email: email,
-                              password: password,
-                              // imageUrl: imageUrl!,
-                              bestFood: bestFood,
-                              bestMovie: bestMovie,
-                              compassRes: compassRes,
-                              dob: dob,
-                              fullName: fullName,
-                              major: major,
-                              studentID: studentID,
-                              yearClass: yearClass,
-                            );
-                            if (_isLoading) {
-                              showLoadingDialog(
-                                  context: context, text: "Creating User");
-                            }
 
-                            context.go('/login');
-                          } on WeakPasswordAuthException {
+                          if (email.isEmpty ||
+                              studentID.isEmpty ||
+                              dob.isEmpty ||
+                              major.isEmpty ||
+                              bestMovie.isEmpty ||
+                              password.isEmpty ||
+                              compassRes.isEmpty ||
+                              bestFood.isEmpty ||
+                              yearClass.isEmpty ||
+                              fullName.isEmpty) {
                             await showErrorDialog(
                               context,
-                              "Weak Password",
+                              'All fields are required, fill empty fields',
                             );
-                          } on EmailAlreadyInUseAuthException {
+                          } else if (emailRegex.hasMatch(email) == false) {
+                            _email.clear();
                             await showErrorDialog(
                               context,
-                              "Email is already in use",
+                              "Invalid email address",
                             );
-                          } on InvalidEmailAuthException {
+                          } else if (numericRegex.hasMatch(studentID) ==
+                              false) {
+                            _studentID.clear();
                             await showErrorDialog(
                               context,
-                              "Invalid email",
+                              "Student ID should be numeric",
                             );
-                          } on GenericAuthException {
-                            debugPrint(password);
-                            debugPrint(email);
+                          } else if (fullName.length > 25) {
                             await showErrorDialog(
                               context,
-                              "Failed to register",
+                              "Name is too long, try initials",
                             );
+                          } else {
+                            try {
+                              await creatingUser(
+                                email: email,
+                                password: password,
+                                // imageUrl: imageUrl!,
+                                bestFood: bestFood,
+                                bestMovie: bestMovie,
+                                compassRes: compassRes,
+                                dob: dob,
+                                fullName: fullName,
+                                major: major,
+                                studentID: studentID,
+                                yearClass: yearClass,
+                              );
+                              if (_isLoading) {
+                                showLoadingDialog(
+                                    context: context, text: "Creating User");
+                              }
+
+                              final snackbar = SnackBar(
+                                duration: const Duration(seconds: 10),
+                                content: Text(
+                                  'Almost done, Please wait...',
+                                  style: GoogleFonts.ubuntu(
+                                    color: themeColor,
+                                  ),
+                                ),
+                                backgroundColor: Colors.white,
+                                elevation: 5,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+
+                              context.go('/login');
+                            } on WeakPasswordAuthException {
+                              await showErrorDialog(
+                                context,
+                                "Weak Password",
+                              );
+                            } on EmailAlreadyInUseAuthException {
+                              await showErrorDialog(
+                                context,
+                                "Email is already in use",
+                              );
+                            } on InvalidEmailAuthException {
+                              await showErrorDialog(
+                                context,
+                                "Invalid email",
+                              );
+                            } on GenericAuthException {
+                              debugPrint(password);
+                              debugPrint(email);
+                              await showErrorDialog(
+                                context,
+                                "Failed to register",
+                              );
+                            }
                           }
                         },
                         child: const Text(

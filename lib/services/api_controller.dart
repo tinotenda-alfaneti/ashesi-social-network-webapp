@@ -4,7 +4,6 @@ import 'dart:convert';
 
 // class to make requests to the my API
 class ApiController {
-
   //function to create a new user - sending a post request to the API
   Future<bool> createNewUser(
       {required final String email,
@@ -45,7 +44,6 @@ class ApiController {
     }
   }
 
-
   //fundtion to retrieve a user from the database using the API
   Future<http.Response?> getUser({required String email}) async {
     try {
@@ -66,7 +64,11 @@ class ApiController {
     required final String major,
     required final String bestMovie,
     required final String bestFood,
+    required final String campusResident,
+    required final String fullName,
   }) async {
+    final residentValue =
+        campusResident.toLowerCase() == "yes" ? "true" : "false";
     try {
       final http.Response response = await http.post(
         Uri.parse(
@@ -77,7 +79,9 @@ class ApiController {
             'major': major,
             'best-movie': bestMovie,
             'best-food': bestFood,
-            'email': email
+            'email': email,
+            'compass-resident': residentValue,
+            'full-name': fullName,
           },
         ),
       );

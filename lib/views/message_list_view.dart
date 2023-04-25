@@ -1,4 +1,4 @@
-import 'package:ashesi_social_network/constants/defined_fonts.dart';
+import 'package:ashesi_social_network/utils/custom_styles.dart';
 import 'package:ashesi_social_network/services/api_controller.dart';
 import 'package:ashesi_social_network/services/auth_service/firebase_service.dart';
 import 'package:ashesi_social_network/services/message_structure.dart';
@@ -73,46 +73,45 @@ class _MessagesListViewState extends State<MessagesListView> {
                         Container(
                           margin: const EdgeInsets.only(bottom: 4),
                           padding: const EdgeInsets.only(top: 13),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    WidgetSpan(
-                                      child: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 8.0),
-                                        width: 25,
-                                        height: 25,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                "images/default_user.png"),
-                                            fit: BoxFit.fill,
+                          child: SingleChildScrollView(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        child: Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 8.0),
+                                          width: 15,
+                                          height: 15,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            image: const DecorationImage(
+                                              //TODO: Load profile image
+                                              image: AssetImage(
+                                                  "images/default_user.png"), //TODO: Load profile image
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    TextSpan(
-                                      text: message.senderName,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color:
-                                              Theme.of(context).highlightColor,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                      TextSpan(
+                                        text: message.senderName,
+                                        style: TextStyle(
+                                            fontSize: 11,
+                                            color: Theme.of(context)
+                                                .highlightColor,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                message.dateSend,
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -125,15 +124,27 @@ class _MessagesListViewState extends State<MessagesListView> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () async {
-                            if (message.senderEmail ==
-                                FirebaseAuthService().currentUser!.email) {
-                              await ApiController()
-                                  .deleteMessage(msgId: message.documentId);
-                            }
-                          },
-                          icon: const Icon(Icons.delete),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                if (message.senderEmail ==
+                                    FirebaseAuthService().currentUser!.email) {
+                                  await ApiController()
+                                      .deleteMessage(msgId: message.documentId);
+                                }
+                              },
+                              icon: const Icon(Icons.delete),
+                            ),
+                            const Spacer(),
+                            Container(
+                              child: Text(
+                                message.dateSend,
+                                style: const TextStyle(
+                                    fontSize: 10, color: themeColor),
+                              ),
+                            ),
+                          ],
                         )
                       ],
                     ),

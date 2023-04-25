@@ -3,10 +3,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const nodemailer =require('nodemailer');
 
-
-
 admin.initializeApp();
-// const db = getFirestore();
 
 var transporter = nodemailer.createTransport({
     host:'smtp.gmail.com',
@@ -18,18 +15,11 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-// const users_db = db.collection('users');
-
-
-
-
 
 exports.sendEmail = functions.firestore.document('messages/{docId}')
 .onCreate(async (snap,context)=>{
     const data=snap.data();
     const errors = [];
-
-    
         
     const userSnapshots = await admin.firestore().collection('users').get();
     var users = userSnapshots.docs.map(snap => snap.data().email);
@@ -64,9 +54,9 @@ exports.sendEmail = functions.firestore.document('messages/{docId}')
         });
     }
 
+    
     const mailOptions = {
         from: `ashsocialnet@gmail.com`,
-        // to: snap.data().email,
         to:`${users.at(x)}`,
         subject: 'Ashesi Notification',
         text:`Hi!\n${data['sender-name']} made a post on Ashesi Social Network.\nGo and check it out\n\nRegards,\nASN Admin`,
