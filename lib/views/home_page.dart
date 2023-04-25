@@ -125,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: SingleChildScrollView(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SingleChildScrollView(
                           child: Container(
